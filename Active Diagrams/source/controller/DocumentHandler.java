@@ -11,11 +11,16 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
+import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.NullPointerException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.table.XCell;
@@ -27,6 +32,9 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.view.XSelectionSupplier;
+
+import extension.ContetMenuClickHandler;
+import extension.ContextMenuInterceptor;
 
 public class DocumentHandler {
 	
@@ -221,6 +229,48 @@ public class DocumentHandler {
 		
 		XPropertySet xShapePropertySet = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, shape);
 		return xShapePropertySet;
+	}
+	
+	public void subscribeContextMenu() {
+		try {
+			initializeXComponent();
+			/*XFrame m_xFrame = (com.sun.star.frame.XFrame) UnoRuntime.queryInterface(
+					com.sun.star.frame.XFrame.class, m_xMCF);*/
+			XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, m_xComp);
+			
+			XController xController = xModel.getCurrentController();
+			//XController xController = m_xFrame.getController();
+			if (xController != null) {
+				com.sun.star.ui.XContextMenuInterception xContextMenuInterception =
+				(com.sun.star.ui.XContextMenuInterception) UnoRuntime.queryInterface(
+				com.sun.star.ui.XContextMenuInterception.class, xController);
+
+				if (xContextMenuInterception != null) {
+					/*com.sun.star.ui.XContextMenuInterceptor xContextMenuInterceptor =
+					(com.sun.star.ui.XContextMenuInterceptor) UnoRuntime.queryInterface(
+					com.sun.star.ui.XContextMenuInterceptor.class, this);
+					xContextMenuInterception.registerContextMenuInterceptor(xContextMenuInterceptor);*/
+					ContextMenuInterceptor xContextMenuInterceptor = new ContextMenuInterceptor();
+//					ContextMenuInterceptor xContextMenuInterceptor = 
+//							(ContextMenuInterceptor) UnoRuntime.queryInterface(
+//							ContextMenuInterceptor.class, 
+//							m_xMCF.createInstanceWithContext("extension.ContextMenuInterceptor", m_xContext));
+							xContextMenuInterception.registerContextMenuInterceptor(xContextMenuInterceptor);
+							
+				}
+				
+				// Register mouse handler.
+				/*com.sun.star.awt.XUserInputInterception xUserInputInterception =
+				(com.sun.star.awt.XUserInputInterception) UnoRuntime.queryInterface(
+				com.sun.star.awt.XUserInputInterception.class, xController);
+				if (xUserInputInterception != null) {
+					xUserInputInterception.addMouseClickHandler(new ContetMenuClickHandler());
+				}*/
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void execute() {

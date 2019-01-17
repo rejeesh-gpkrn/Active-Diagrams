@@ -1,5 +1,5 @@
 #UNO project configuration file
-#Mon Dec 17 21:17:43 JST 2018
+#Thu Jan 17 20:57:26 JST 2019
 project.srcdir=/source
 regclassname=org.libreoffice.modeler.comp.RegistrationHandler
 javaversion=java5
