@@ -11,6 +11,7 @@ import controller.Craftsman;
 import controller.DocumentHandler;
 import dialog.LvPropertyDialog;
 import dialog.LvPropertyInfo;
+import dialog.RichDialogContainer;
 
 import com.sun.star.lib.uno.helper.Factory;
 
@@ -302,6 +303,10 @@ public final class ModelerImpl extends WeakBase
 		m_timer.schedule(m_timerTask, 0, 1000);*/
 		
 		doWalk();
+		LvPropertyDialog propertyDialog = new LvPropertyDialog();
+		propertyDialog.show();
+		/*Dummy d = new Dummy();
+		d.show();*/
 		/*LvPropertyDialog prop = new LvPropertyDialog();
 		LvPropertyInfo propertyInfo = prop.showModal();
 		JOptionPane.showMessageDialog(null, propertyInfo.getName());*/

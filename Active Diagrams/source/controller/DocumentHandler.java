@@ -234,12 +234,9 @@ public class DocumentHandler {
 	public void subscribeContextMenu() {
 		try {
 			initializeXComponent();
-			/*XFrame m_xFrame = (com.sun.star.frame.XFrame) UnoRuntime.queryInterface(
-					com.sun.star.frame.XFrame.class, m_xMCF);*/
 			XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, m_xComp);
 			
 			XController xController = xModel.getCurrentController();
-			//XController xController = m_xFrame.getController();
 			if (xController != null) {
 				com.sun.star.ui.XContextMenuInterception xContextMenuInterception =
 				(com.sun.star.ui.XContextMenuInterception) UnoRuntime.queryInterface(

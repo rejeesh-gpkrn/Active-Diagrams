@@ -1,179 +1,56 @@
 package dialog;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import contract.RichDialog;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import java.awt.GridLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.SwingConstants;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Window.Type;
+/**
+ * @author Rejeesh G.
+ *
+ */
+public class LvPropertyDialog extends RichDialog {
+	
+	private final String NAME = "Properties";
 
-public class LvPropertyDialog extends JDialog {
-	
-	private LvPropertyDialogActionAdapter btnActionAdapter = new LvPropertyDialogActionAdapter(this);
-	
-	private LvPropertyDialogWindowListener windowListener = new LvPropertyDialogWindowListener(this);
-	
-	private LvPropertyInfo propertyInfo;
-	
-	private JTextField jtxtPropNameValue;
-	private JButton jbtnApply;
-
-	/**
-	 * Default.
-	 */
-	public LvPropertyDialog() {
-		super();
-		
-		decorate();
-		
-		addParts();
-		
-		// Event subscription.
-		addEventListener();
-		
-		propertyInfo = new LvPropertyInfo();
-	}
-	
-	private void decorate() {
-		
-		setType(Type.POPUP);
-		setTitle("Activation Settings");
-	}
-	
-	private void addParts() {
-		
-		getContentPane().setLayout(null);
-
-		JLabel jlblPropName = new JLabel("Name");
-		jlblPropName.setBackground(Color.BLACK);
-		jlblPropName.setHorizontalAlignment(SwingConstants.CENTER);
-		jlblPropName.setBounds(34, 49, 69, 20);
-		getContentPane().add(jlblPropName);
-		
-		jtxtPropNameValue = new JTextField();
-		jtxtPropNameValue.setBounds(104, 46, 294, 26);
-		getContentPane().add(jtxtPropNameValue);
-		jtxtPropNameValue.setColumns(10);
-		
-		jbtnApply = new JButton("Apply");
-		jbtnApply.setBounds(300, 198, 98, 30);
-		getContentPane().add(jbtnApply);
-	}
-	
-	private void addEventListener() {
-		jbtnApply.addActionListener(btnActionAdapter);
-		this.addWindowListener(windowListener);
-	}
-	
-	public LvPropertyInfo showModal() {
-		
-		this.setSize(500, 400);
-		this.setModal(true);
-		this.setVisible(true);
-		return propertyInfo;
-	}
-	
-	public void jbtnApply_actionPerformed(ActionEvent e) {
-		
-		propertyInfo.setName(jtxtPropNameValue.getText());
-	}
-	
-	public void onClosing(WindowEvent e) {
-		doClose();
-		System.out.println("Closing");
-	}
-	
-	private void doClose() {
-		jbtnApply.removeActionListener(btnActionAdapter);
-	}
-}
-
-// TODO: Move as common class.
-class LvPropertyDialogActionAdapter implements ActionListener {
-	
-	private LvPropertyDialog adaptee;
-
-	/**
-	 * @param adaptee
-	 */
-	public LvPropertyDialogActionAdapter(LvPropertyDialog adaptee) {
-		super();
-		this.adaptee = adaptee;
+	@Override
+	public String getTitle() {
+		return NAME;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		adaptee.jbtnApply_actionPerformed(arg0);
-	}
-}
+	public Scene createScene() {
+		Group  root  =  new  Group();
+        Scene  scene  =  new  Scene(root, Color.CADETBLUE);
+        Text  text  =  new  Text();
+        
+        text.setX(40);
+        text.setY(100);
+        text.setFont(new Font(25));
+        text.setText("Welcome JavaFX Property Bag");
 
-//TODO: Move as common class.
-class LvPropertyDialogWindowListener implements WindowListener {
-	
-	private LvPropertyDialog adaptee;
-	
-	/**
-	 * @param adaptee
-	 */
-	public LvPropertyDialogWindowListener(LvPropertyDialog adaptee) {
-		super();
-		
-		this.adaptee = adaptee;
-	}
+        root.getChildren().add(text);
+        
+        Button x = new Button();
+        x.setText("Close");
+        x.setOnMouseClicked(new EventHandler<Event>() {
 
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+			@Override
+			public void handle(Event event) {
+				// TODO Auto-generated method stub
+				System.out.println("Close clicked");
+			}
+        	
+		});
+        
+        root.getChildren().add(x);
 
-	@Override
-	public void windowClosed(WindowEvent e) {		
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		adaptee.onClosing(e);
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
+        return (scene);
 	}
 	
 }
