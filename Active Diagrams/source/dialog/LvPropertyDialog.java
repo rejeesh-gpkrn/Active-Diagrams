@@ -33,7 +33,8 @@ public class LvPropertyDialog extends RichDialog {
 
 	@Override
 	public Scene createScene() {
-				
+			
+		// TODO: Create to match with property bag styles.
 		GridPane pane = new GridPane();
         pane.setAlignment(Pos.CENTER);
         pane.setHgap(10);
@@ -41,7 +42,7 @@ public class LvPropertyDialog extends RichDialog {
         pane.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(pane, 300, 275);
 
-        Text sceneTitle = new Text("Properties");
+        Text sceneTitle = new Text("Active Properties");
         sceneTitle.setFont(Font.font("Arial", FontWeight.NORMAL,20));
         pane.add(sceneTitle, 0, 0, 2, 1);
         Label total = new Label("Name:");
