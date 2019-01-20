@@ -40,7 +40,7 @@ public class RichDialogContainer {
 		JFrame frame = new JFrame("Rich Dialog");
         final JFXPanel fxPanel = new JFXPanel();
         frame.add(fxPanel);
-        frame.setSize(300, 200);
+        frame.setSize(500, 400);
         frame.setVisible(true);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
