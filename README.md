@@ -36,5 +36,5 @@ No compilation errors shown in Probelms Tab
 - Right click project
 - Select Run As->LibreOffice Extension
 
-Check whether **Modeler** menu appeared in Main Menu Bar.
+Check whether **Modeler** menu appeared in LibreOffice Main Menu Bar.
 
