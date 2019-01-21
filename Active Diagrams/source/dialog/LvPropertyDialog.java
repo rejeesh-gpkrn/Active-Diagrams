@@ -1,6 +1,7 @@
 package dialog;
 
 import contract.RichDialog;
+import contract.RichDialogController;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -25,6 +26,15 @@ import javafx.scene.text.Text;
 public class LvPropertyDialog extends RichDialog {
 	
 	private final String NAME = "Properties";
+	
+	// TODO: Set through public method.
+	Text statusText;
+	TextField totalField;
+	TextField orderNumberField;
+	
+	public LvPropertyDialog() {
+		setController(new LvPropertyDialogController(this));
+	}
 
 	@Override
 	public String getTitle() {
@@ -42,16 +52,18 @@ public class LvPropertyDialog extends RichDialog {
         pane.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(pane, 300, 275);
 
+        statusText = new Text();
+    	totalField = new TextField();
+    	orderNumberField = new TextField();
+        
         Text sceneTitle = new Text("Active Properties");
         sceneTitle.setFont(Font.font("Arial", FontWeight.NORMAL,20));
         pane.add(sceneTitle, 0, 0, 2, 1);
         Label total = new Label("Name:");
         pane.add(total, 0, 1);
-        final TextField totalField = new TextField();
         pane.add(totalField, 1, 1);
         Label percent = new Label("Order Number:");
         pane.add(percent,0,2);
-        final TextField orderNumberField = new TextField();
         pane.add(orderNumberField, 1, 2);
 
         Button saveButton = new Button("Save");        
@@ -60,16 +72,18 @@ public class LvPropertyDialog extends RichDialog {
         hbox.getChildren().add(saveButton);
         pane.add(hbox, 1, 4);
 
-        final Text statusText = new Text();
         pane.add(statusText, 1, 6);
+        
+        RichDialogController controller = getController();
+        saveButton.setOnAction(controller);
 
-        saveButton.setOnAction(new EventHandler<ActionEvent>() {
+        /*saveButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent t) {
                 statusText.setText("Name [" + totalField.getText() + " ] Order Number [" + orderNumberField.getText() + " ]");
             }
-        });
+        });*/
 		
 
         return (scene);

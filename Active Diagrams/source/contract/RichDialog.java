@@ -14,6 +14,8 @@ public abstract class RichDialog {
 	
 	private RichDialogContainer m_dialogContainer;
 	
+	private RichDialogController m_controller;
+
 	public abstract String getTitle();
 
 	public abstract Scene createScene();
@@ -25,4 +27,13 @@ public abstract class RichDialog {
 	public void show() {
 		m_dialogContainer.show(this);
 	}
+	
+	public RichDialogController getController() {
+		return m_controller;
+	}
+
+	protected void setController(RichDialogController controller) {
+		this.m_controller = controller;
+	}
+	
 }
