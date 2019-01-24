@@ -21,6 +21,15 @@ public class RichDialogContainer {
 	
 	private RichDialog m_childScene;
 	
+	private int m_width = 200;
+	
+	private int m_height = 200;
+
+	public void setSize(int width, int height) {
+		this.m_width = width;
+		this.m_height = height;
+	}
+	
 	public void show(RichDialog richDialogScene) {
 		if (richDialogScene == null) {
 			throw new IllegalArgumentException("Content is not specified.");
@@ -40,7 +49,7 @@ public class RichDialogContainer {
 		JFrame frame = new JFrame("Rich Dialog");
         final JFXPanel fxPanel = new JFXPanel();
         frame.add(fxPanel);
-        frame.setSize(500, 400);
+        frame.setSize(m_width, m_height);
         frame.setVisible(true);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         

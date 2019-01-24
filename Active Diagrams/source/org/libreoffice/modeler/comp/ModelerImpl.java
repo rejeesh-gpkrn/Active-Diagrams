@@ -304,6 +304,8 @@ public final class ModelerImpl extends WeakBase
 		
 		doWalk();
 		LvPropertyDialog propertyDialog = new LvPropertyDialog();
+		propertyDialog.setWidth(400);
+		propertyDialog.setHeight(500);
 		propertyDialog.show();
 		/*Dummy d = new Dummy();
 		d.show();*/

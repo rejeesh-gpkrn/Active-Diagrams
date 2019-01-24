@@ -15,8 +15,10 @@ public class LvPropertyDialogController extends RichDialogController {
 	public void handle(ActionEvent event) {
 		// TODO Auto-generated method stub
 		LvPropertyDialog propertyDialog = (LvPropertyDialog)getView();
-		propertyDialog.statusText.setText("Name [" + propertyDialog.totalField.getText() + 
-											" ] Order [" + propertyDialog.orderNumberField.getText() + " ]");
+		LvPropertyInfo prp = (LvPropertyInfo)propertyDialog.properties.get(0);
+		System.out.println(prp.getValue());
+		/*propertyDialog.statusText.setText("Name [" + propertyDialog.totalField.getText() + 
+											" ] Order [" + propertyDialog.orderNumberField.getText() + " ]");*/
 	}
 
 }

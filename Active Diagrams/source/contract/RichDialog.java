@@ -15,6 +15,10 @@ public abstract class RichDialog {
 	private RichDialogContainer m_dialogContainer;
 	
 	private RichDialogController m_controller;
+	
+	private int m_width;
+	
+	private int m_height;
 
 	public abstract String getTitle();
 
@@ -25,6 +29,7 @@ public abstract class RichDialog {
 	}
 
 	public void show() {
+		m_dialogContainer.setSize(m_width, m_height);
 		m_dialogContainer.show(this);
 	}
 	
@@ -35,5 +40,22 @@ public abstract class RichDialog {
 	protected void setController(RichDialogController controller) {
 		this.m_controller = controller;
 	}
+
+	public int getWidth() {
+		return m_width;
+	}
+
+	public void setWidth(int width) {
+		this.m_width = width;
+	}
+
+	public int getHeight() {
+		return m_height;
+	}
+
+	public void setHeight(int height) {
+		this.m_height = height;
+	}
+	
 	
 }
