@@ -43,7 +43,7 @@ public class LvPropertyDialog extends RichDialog {
 	Text statusText;
 	TextField totalField;
 	TextField orderNumberField;
-	TableView<LvPropertyInfo> table;
+	TableView<LvPropertyInfo> propertyTable;
 	
 	ObservableList<LvPropertyInfo> properties;
 
@@ -74,13 +74,13 @@ public class LvPropertyDialog extends RichDialog {
         pane.setPadding(new Insets(25, 25, 25, 25));
         Scene scene = new Scene(pane, getWidth(), getHeight());
         
-        table = new TableView<LvPropertyInfo>();
+        propertyTable = new TableView<LvPropertyInfo>();
         properties = prepareProperties();
-        table.setItems(properties);
-        table.setEditable(true);
+        propertyTable.setItems(properties);
+        propertyTable.setEditable(true);
         
-        TableColumn<LvPropertyInfo, String> titleColumn = new TableColumn<LvPropertyInfo, String>("Property");
-        titleColumn.setCellValueFactory(new PropertyValueFactory<LvPropertyInfo, String>("name"));
+        TableColumn<LvPropertyInfo, String> nameColumn = new TableColumn<LvPropertyInfo, String>("Property");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<LvPropertyInfo, String>("name"));
         TableColumn<LvPropertyInfo, String> valueColumn = new TableColumn<LvPropertyInfo, String>("Value");
         valueColumn.setEditable(true);
         valueColumn.setCellValueFactory(new PropertyValueFactory<LvPropertyInfo, String>("value"));
@@ -94,23 +94,13 @@ public class LvPropertyDialog extends RichDialog {
         	 LvPropertyInfo property = event.getTableView().getItems().get(row);
         	 property.setValue(newValue);
         });
-        		
-        		
-        		/*(CellEditEvent<LvPropertyInfo, String> event)->{
-        	TablePosition<LvPropertyInfo, String> pos = event.getTablePosition();
-        	String newValue = event.getNewValue();
-        	 int row = pos.getRow();
-        	 LvPropertyInfo property = event.getTableView().getItems().get(row);
-        	 property.setValue(newValue);
-        	 
-        });*/
         
-        table.getColumns().setAll(titleColumn, valueColumn);
+        propertyTable.getColumns().setAll(nameColumn, valueColumn);
         
-        table.prefWidth(getWidth() - 25);
-        table.prefHeight(getHeight());
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        pane.add(table, 0, 0, 2, 1);
+        propertyTable.prefWidth(getWidth() - 25);
+        propertyTable.prefHeight(getHeight());
+        propertyTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        pane.add(propertyTable, 0, 0, 2, 1);
         
 
         Button saveButton = new Button("Save");        
