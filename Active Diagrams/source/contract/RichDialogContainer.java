@@ -1,11 +1,10 @@
-package dialog;
+package contract;
 
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import contract.RichDialog;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;

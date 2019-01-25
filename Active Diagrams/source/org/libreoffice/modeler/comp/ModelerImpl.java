@@ -1,73 +1,36 @@
 package org.libreoffice.modeler.comp;
 
-import com.sun.star.uno.Type;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.URL;
-import com.sun.star.view.XSelectionSupplier;
-
-import controller.Craftsman;
-import controller.DocumentHandler;
-import dialog.LvPropertyDialog;
-import dialog.LvPropertyInfo;
-import dialog.RichDialogContainer;
-
-import com.sun.star.lib.uno.helper.Factory;
-
-import java.awt.HeadlessException;
-import java.awt.TrayIcon.MessageType;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.rmi.activation.ActivationException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.sound.midi.MidiDevice.Info;
 import javax.swing.JOptionPane;
 
 import com.sun.star.awt.MessageBoxType;
-import com.sun.star.awt.Size;
-import com.sun.star.awt.XActionListener;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XEnumerationAccess;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.container.XNameContainer;
-import com.sun.star.container.XNamed;
 import com.sun.star.drawing.ConnectorType;
-import com.sun.star.drawing.RectanglePoint;
-import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XShape;
-import com.sun.star.drawing.XShapeDescriptor;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.frame.DispatchDescriptor;
-import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XStatusListener;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.NullPointerException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.lang.XEventListener;
 import com.sun.star.lang.XInitialization;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleComponentFactory;
-import com.sun.star.registry.XRegistryKey;
-import com.sun.star.table.XCell;
-import com.sun.star.table.XCellRange;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextContent;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextGraphicObjectsSupplier;
-import com.sun.star.text.XTextShapesSupplier;
+import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
+import com.sun.star.registry.XRegistryKey;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.URL;
+
+import controller.Craftsman;
+import controller.DocumentHandler;
+import dialog.LvPropertyDialog;
 
 
 public final class ModelerImpl extends WeakBase

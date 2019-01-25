@@ -3,7 +3,6 @@
  */
 package contract;
 
-import dialog.RichDialogContainer;
 import javafx.scene.Scene;
 
 /**
