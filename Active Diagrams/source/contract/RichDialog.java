@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 
 /**
  * @author Rejeesh G.
- *
+ * Base class for creating pop-up dialogs.
  */
 public abstract class RichDialog {
 	
@@ -27,6 +27,10 @@ public abstract class RichDialog {
 		m_dialogContainer = new RichDialogContainer();
 	}
 
+	/**
+	 * Bring up pop-up dialog.
+	 * Default style is Medeless.
+	 */
 	public void show() {
 		m_dialogContainer.setSize(m_width, m_height);
 		m_dialogContainer.show(this);
