@@ -9,7 +9,7 @@ import javafx.scene.Scene;
  * @author Rejeesh G.
  * Base class for creating pop-up dialogs.
  */
-public abstract class RichDialog {
+public abstract class RichDialog implements ChangeListener {
 	
 	private RichDialogContainer m_dialogContainer;
 	
