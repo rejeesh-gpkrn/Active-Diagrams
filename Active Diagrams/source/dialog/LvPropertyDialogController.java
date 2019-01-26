@@ -30,6 +30,7 @@ public class LvPropertyDialogController extends RichDialogController {
 		m_data.addProperty(new LvPropertyInfo("Name"));
 		m_data.addProperty(new LvPropertyInfo("Order"));
 		m_data.addProperty(new LvPropertyInfo("Blink"));
+		m_data.addProperty(new LvPropertyInfo("Enabled"));
 	}
 	
 	public ObservableList<LvPropertyInfo> getProperties(){
