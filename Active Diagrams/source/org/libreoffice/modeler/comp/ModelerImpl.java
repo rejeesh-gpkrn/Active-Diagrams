@@ -121,6 +121,11 @@ public final class ModelerImpl extends WeakBase
     		stopFlicker();
     		System.out.println("stopFlicker Executed.");
     		break;
+    		
+    	case "showProperties":
+    		showProperties();
+    		System.out.println("showProperties Executed.");
+    		break;
     	
     	default:
     		System.out.println("default Executed.");
@@ -266,15 +271,6 @@ public final class ModelerImpl extends WeakBase
 		m_timer.schedule(m_timerTask, 0, 1000);*/
 		
 		doWalk();
-		LvPropertyDialog propertyDialog = new LvPropertyDialog();
-		propertyDialog.setWidth(400);
-		propertyDialog.setHeight(500);
-		propertyDialog.show();
-		/*Dummy d = new Dummy();
-		d.show();*/
-		/*LvPropertyDialog prop = new LvPropertyDialog();
-		LvPropertyInfo propertyInfo = prop.showModal();
-		JOptionPane.showMessageDialog(null, propertyInfo.getName());*/
 	}
 	
 	private void doWalk() {
@@ -296,6 +292,13 @@ public final class ModelerImpl extends WeakBase
 	
 	private void stopFlicker() {
 		//JOptionPane.showMessageDialog(null, "stopFlicker executed");
+	}
+	
+	private void showProperties() {
+		LvPropertyDialog propertyDialog = new LvPropertyDialog();
+		propertyDialog.setWidth(400);
+		propertyDialog.setHeight(500);
+		propertyDialog.show();
 	}
 
 	@Override
