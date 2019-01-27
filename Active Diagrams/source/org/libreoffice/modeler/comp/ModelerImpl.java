@@ -1,5 +1,6 @@
 package org.libreoffice.modeler.comp;
 
+import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -49,7 +50,8 @@ public final class ModelerImpl extends WeakBase
     private boolean m_On;
     private Timer m_timer;
     private TimerTask m_timerTask;
-    private int m_timerShow;
+    private volatile boolean m_running = false;
+    private volatile int m_timerShow = 0;
 
     public ModelerImpl( XComponentContext context )
     {
@@ -255,14 +257,43 @@ public final class ModelerImpl extends WeakBase
 	}
 	
 	private void startFlicker() {
+		
+		m_running = true;
+		
+		//Iterate over all scheduled tasks.
+		for(int idx=0; idx<20; idx++) {
+			
+			EventQueue.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					m_timerShow++;
+					if (!m_running || m_timerShow >= 10) {
+						System.out.println("Cancelled scheduled job at [" + m_timerShow + "]");
+						return;
+					}
+					
+					m_On = !m_On;
+					extractShape();
+					
+					// Execute one task.
+					for(int tdx=0; tdx<100000; tdx++) {
+						System.out.println("Job [" + m_timerShow + "] - Task [" + tdx + "]");
+					}
+				}
+			});
+			
+			System.out.println("[" + idx + "] Jobs pushed.");
+		}
+		
 		/*m_timerTask = new TimerTask() {
 			
 			@Override
 			public void run() {
 				m_On = !m_On;
 				extractShape();
-				m_timerShow += 1;
-				if (m_timerShow >=6) {
+				//m_timerShow += 1;
+				if (!m_running) {
 					cancel();
 					m_timer.cancel();
 				}
@@ -271,6 +302,11 @@ public final class ModelerImpl extends WeakBase
 		m_timer.schedule(m_timerTask, 0, 1000);*/
 		
 		doWalk();
+	}
+	
+	public void doJob() {
+		m_On = !m_On;
+		extractShape();
 	}
 	
 	private void doWalk() {
@@ -291,7 +327,7 @@ public final class ModelerImpl extends WeakBase
 	}
 	
 	private void stopFlicker() {
-		//JOptionPane.showMessageDialog(null, "stopFlicker executed");
+		// TODO Implement abort mechanism.
 	}
 	
 	private void showProperties() {
