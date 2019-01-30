@@ -2,6 +2,11 @@ package dialog;
 
 import java.util.List;
 
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchHelper;
+import com.sun.star.util.URL;
+
 import contract.RichDialog;
 import contract.RichDialogController;
 import javafx.collections.FXCollections;
@@ -11,6 +16,8 @@ import javafx.event.ActionEvent;
 public class LvPropertyDialogController extends RichDialogController {
 	
 	private LvPropertyDialogData m_data;
+	
+	private XDispatch m_propertyDispatch;
 
 	public LvPropertyDialogController(RichDialog view) {
 		super(view);
@@ -43,12 +50,26 @@ public class LvPropertyDialogController extends RichDialogController {
 						FXCollections.observableList(enabledProperties);
 		return observableProperties;
 	}
+	
+	public void setXDispatcher(XDispatch propertyDispatch) {
+		m_propertyDispatch = propertyDispatch;
+	}
 
 	@Override
 	public void handle(ActionEvent event) {
 		// TODO Auto-generated method stub
 		LvPropertyDialog propertyDialog = (LvPropertyDialog)getView();
 		LvPropertyInfo prp = (LvPropertyInfo)propertyDialog.properties.get(0);
+		
+		// TODO Organize usage.
+		URL[] aParseURL = new URL[1];
+		aParseURL[0] = new URL();
+		aParseURL[0].Complete = "service:org.libreoffice.modeler.Modeler?extractShape";
+		PropertyValue pv = new PropertyValue();
+        pv.Name = "Name";
+        pv.Value = prp.getValue();
+		m_propertyDispatch.dispatch(aParseURL[0], new PropertyValue[] {pv});
+		
 		System.out.println(prp.getValue());
 		/*propertyDialog.statusText.setText("Name [" + propertyDialog.totalField.getText() + 
 											" ] Order [" + propertyDialog.orderNumberField.getText() + " ]");*/

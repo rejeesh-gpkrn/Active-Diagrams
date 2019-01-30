@@ -11,8 +11,11 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.drawing.XDrawPageSupplier;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
+import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.EventObject;
@@ -31,6 +34,8 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.URL;
+import com.sun.star.util.XURLTransformer;
 import com.sun.star.view.XSelectionSupplier;
 
 import extension.ContetMenuClickHandler;
@@ -188,6 +193,18 @@ public class DocumentHandler {
 		return xShapesList;
 	}
 	
+	public ArrayList<XShape> extractSelectedShapes(XSelectionSupplier xSelectionSupplier) throws NullPointerException{
+		if (xSelectionSupplier == null) {
+			throw new NullPointerException();
+		}
+		
+		XShapes xShapes = (XShapes) UnoRuntime.queryInterface( XShapes.class, xSelectionSupplier.getSelection());
+		
+		ArrayList<XShape> xShapesList = extractSelectedShapes(xShapes);
+		
+		return xShapesList;
+	}
+	
 	public ArrayList<XShape> extractSelectedShapes(XTextDocument textDocument) throws NullPointerException{
 		if (textDocument == null) {
 			throw new NullPointerException();
@@ -268,6 +285,33 @@ public class DocumentHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public XFrame getXFrame() {
+		return m_xDesktop.getCurrentFrame();
+	}
+	
+	public XDispatch getXDispatcher(String sURL) {
+		try {
+			URL[] aParseURL = new URL[1];
+			aParseURL[0] = new URL();
+			aParseURL[0].Complete = sURL;
+			
+			Object oTransformer = m_xMCF.createInstanceWithContext("com.sun.star.util.URLTransformer", m_xContext);
+			XURLTransformer xTransformer = UnoRuntime.queryInterface(XURLTransformer.class, oTransformer);
+			xTransformer.parseStrict(aParseURL);
+			
+			XDispatchProvider xDispatchProvider = UnoRuntime.queryInterface(
+											XDispatchProvider.class, getXFrame());
+			
+			XDispatch xDispatch = xDispatchProvider.queryDispatch(aParseURL[0], "", 0);
+	        return xDispatch;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	private void execute() {

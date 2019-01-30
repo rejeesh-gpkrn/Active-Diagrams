@@ -1,6 +1,7 @@
 package org.libreoffice.modeler.comp;
 
 import java.awt.EventQueue;
+import java.rmi.activation.ActivationException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,12 +27,15 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.URL;
 
 import controller.Craftsman;
 import controller.DocumentHandler;
 import dialog.LvPropertyDialog;
+import dialog.LvPropertyDialogController;
+import utilities.TimeUtil;
 
 
 public final class ModelerImpl extends WeakBase
@@ -55,11 +59,19 @@ public final class ModelerImpl extends WeakBase
 
     public ModelerImpl( XComponentContext context )
     {
+    	System.out.println("Active-Diagrams trying to load.");
+    	
         m_xContext = context;
         initialize();
         m_timer = new Timer("FlickerTimer");
         
+        // TODO Move this invocation to Enable Menu handler.
+        //		This action should not auto-activated.
+        //		This action should be purposefully enabled to work.
         m_docHandler.subscribeContextMenu();
+        
+        // TODO Calculate and log loading time.
+        System.out.println("Active-Diagrams successfully loaded. [" + TimeUtil.now() + "]");
     };
 
     public static XSingleComponentFactory __getComponentFactory( String sImplementationName ) {
@@ -138,14 +150,15 @@ public final class ModelerImpl extends WeakBase
 	private void initialize() {
 		try {
 			m_docHandler = new DocumentHandler(m_xContext);
+			m_docHandler.initializeXComponent();
 		} catch (NullPointerException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
 	
+	// TODO Move code as required.
 	private void execute() {
 		try {
-			m_docHandler.initializeXComponent();
 			XTextDocument xTextDocument = m_docHandler.getXTextDocument();
 			XText xText = m_docHandler.getXText(xTextDocument);
 			JOptionPane.showMessageDialog(null, xText.getString());
@@ -154,9 +167,9 @@ public final class ModelerImpl extends WeakBase
 		}
 	}
 	
+	// TODO Move code as required.
 	private void extractShape() {
 		try {
-			m_docHandler.initializeXComponent();
 			XTextDocument xTextDocument = m_docHandler.getXTextDocument();
 			ArrayList<XShape> xShapes = m_docHandler.extractAllShapes(xTextDocument);
 			for (XShape xShape : xShapes) {
@@ -174,9 +187,9 @@ public final class ModelerImpl extends WeakBase
 		}
 	}
 	
+	// TODO Move code as required.
 	private void connectShapes() {
 		try {
-			m_docHandler.initializeXComponent();
 			XTextDocument xTextDocument = m_docHandler.getXTextDocument();
 			XMultiServiceFactory multiServiceFactory = m_docHandler.initialieXMultiServiceFactory(xTextDocument);
 			//Page 1051
@@ -213,6 +226,7 @@ public final class ModelerImpl extends WeakBase
 		}
 	}
 	
+	// TODO Remove code if not required.
 	private void doTask() {
 		try {
 			m_docHandler.initializeXComponent();
@@ -256,6 +270,7 @@ public final class ModelerImpl extends WeakBase
 		}
 	}
 	
+	// TODO Move code as required.
 	private void startFlicker() {
 		
 		m_running = true;
@@ -304,11 +319,13 @@ public final class ModelerImpl extends WeakBase
 		doWalk();
 	}
 	
+	// TODO Remove code if not required.
 	public void doJob() {
 		m_On = !m_On;
 		extractShape();
 	}
 	
+	// TODO Move code as required.
 	private void doWalk() {
 		try {
 			m_docHandler.initializeXComponent();
@@ -326,14 +343,44 @@ public final class ModelerImpl extends WeakBase
 		}
 	}
 	
+	// TODO Move code as required.
 	private void stopFlicker() {
 		// TODO Implement abort mechanism.
 	}
 	
+	// TODO Move code as required.
 	private void showProperties() {
+		
+		String shapeName = "";
+		String shapeText = "";
+
+		try {
+			XTextDocument xTextDocument = m_docHandler.getXTextDocument();
+			ArrayList<XShape> selectedShapes =  m_docHandler.extractSelectedShapes(xTextDocument);
+			
+			if (selectedShapes.size() > 0) {
+				XShape xShape = selectedShapes.get(0);
+				XPropertySet property = m_docHandler.getXPropertySet(xShape);
+				
+				shapeName = (String)property.getPropertyValue("Name");
+				XText xShapeText = UnoRuntime.queryInterface(XText.class, xShape);
+				shapeText = xShapeText.getString();
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println("No items selected.");
+		}
+		System.out.println("Property: Name [" + shapeName + "]");
+		System.out.println("Property: Text [" + shapeText + "]");
+		// TODO Pass this value to controller.
+		// TODO Organize usage.
+		XDispatch propertyDispatch = m_docHandler.getXDispatcher("service:org.libreoffice.modeler.Modeler?actionOne");
+		
 		LvPropertyDialog propertyDialog = new LvPropertyDialog();
 		propertyDialog.setWidth(400);
 		propertyDialog.setHeight(500);
+		LvPropertyDialogController dialogController = (LvPropertyDialogController)propertyDialog.getController();
+		dialogController.setXDispatcher(propertyDispatch);
 		propertyDialog.show();
 	}
 
