@@ -57,22 +57,21 @@ public class LvPropertyDialogController extends RichDialogController {
 
 	@Override
 	public void handle(ActionEvent event) {
-		// TODO Auto-generated method stub
-		LvPropertyDialog propertyDialog = (LvPropertyDialog)getView();
-		LvPropertyInfo prp = (LvPropertyInfo)propertyDialog.properties.get(0);
-		
-		// TODO Organize usage.
+
+		// TODO Move URL preparation to another place. Also expose it through interface.
+		// Since the same list is modified from GUI, so m_data is updated by reference.
 		URL[] aParseURL = new URL[1];
 		aParseURL[0] = new URL();
-		aParseURL[0].Complete = "service:org.libreoffice.modeler.Modeler?extractShape";
+		aParseURL[0].Complete = "service:org.libreoffice.modeler.Modeler?processProperties";
 		PropertyValue pv = new PropertyValue();
-        pv.Name = "Name";
-        pv.Value = prp.getValue();
+        pv.Name = "IsChanged";
+        pv.Value = true;
 		m_propertyDispatch.dispatch(aParseURL[0], new PropertyValue[] {pv});
 		
-		System.out.println(prp.getValue());
-		/*propertyDialog.statusText.setText("Name [" + propertyDialog.totalField.getText() + 
-											" ] Order [" + propertyDialog.orderNumberField.getText() + " ]");*/
+		// Property data after update.
+		for(LvPropertyInfo lvPropertyInfo : m_data.getProperties()) {
+			System.out.println(lvPropertyInfo.getName() + " : " + lvPropertyInfo.getValue());
+		}
 	}
 
 }

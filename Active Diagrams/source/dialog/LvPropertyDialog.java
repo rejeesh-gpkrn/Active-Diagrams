@@ -108,5 +108,16 @@ public class LvPropertyDialog extends RichDialog {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean isReady() {
+		// TODO Check state and return value.
+		return true;
+	}
+
+	@Override
+	public String getName() {
+		return "LvPropertyDialog";
+	}
 	
 }

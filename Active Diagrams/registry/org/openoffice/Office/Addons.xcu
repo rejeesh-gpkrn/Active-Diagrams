@@ -10,7 +10,7 @@
 				</prop>
 				<node oor:name="UserDefinedImages">
 					<prop oor:name="ImageSmallURL">
-						<value>vnd.sun.star.extension://org.libreoffice.modeler.Modeler/images/AD.png</value>
+						<value>%origin%/images/AD.png</value>
 					</prop>
 					<prop oor:name="ImageBigURL">
 						<value>vnd.sun.star.extension://org.libreoffice.modeler.Modeler/images/AD.png</value>
@@ -31,9 +31,6 @@
 					<prop oor:name="Target" oor:type="xs:string">
 						<value>_self</value>
 					</prop>
-					<!-- <prop oor:name="ImageIdentifier" oor:type="xs:string">
-						<value>org.libreoffice.modeler.Modeler.imageActionOne</value>
-					</prop> -->
 					<prop oor:name="Context" oor:type="xs:string">
 						<value>com.sun.star.text.TextDocument,com.sun.star.sheet.SpreadsheetDocument,com.sun.star.drawing.DrawingDocument</value>
 					</prop>

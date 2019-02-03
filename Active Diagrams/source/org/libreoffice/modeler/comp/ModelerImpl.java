@@ -1,6 +1,7 @@
 package org.libreoffice.modeler.comp;
 
 import java.awt.EventQueue;
+import java.awt.HeadlessException;
 import java.rmi.activation.ActivationException;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -15,26 +16,37 @@ import com.sun.star.drawing.ConnectorType;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.frame.DispatchDescriptor;
+import com.sun.star.frame.XController;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStatusListener;
 import com.sun.star.lang.NullPointerException;
 import com.sun.star.lang.XInitialization;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.registry.XRegistryKey;
+import com.sun.star.task.XJobExecutor;
+import com.sun.star.task.XJobListener;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.URL;
+import com.sun.star.util.XJobManager;
+import com.sun.star.util.XURLTransformer;
 
 import controller.Craftsman;
 import controller.DocumentHandler;
+import controller.ServiceLocator;
 import dialog.LvPropertyDialog;
 import dialog.LvPropertyDialogController;
+import dialog.LvPropertyDialogData;
 import utilities.TimeUtil;
 
 
@@ -139,6 +151,11 @@ public final class ModelerImpl extends WeakBase
     	case "showProperties":
     		showProperties();
     		System.out.println("showProperties Executed.");
+    		break;
+    		
+    	case "processProperties":
+    		processProperties();
+    		System.out.println("processProperties Executed.");
     		break;
     	
     	default:
@@ -376,12 +393,50 @@ public final class ModelerImpl extends WeakBase
 		// TODO Organize usage.
 		XDispatch propertyDispatch = m_docHandler.getXDispatcher("service:org.libreoffice.modeler.Modeler?actionOne");
 		
-		LvPropertyDialog propertyDialog = new LvPropertyDialog();
-		propertyDialog.setWidth(400);
-		propertyDialog.setHeight(500);
+		LvPropertyDialog propertyDialog = (LvPropertyDialog)ServiceLocator.getService("LvPropertyDialog");
+		if (propertyDialog == null) {
+			propertyDialog = new LvPropertyDialog();
+			propertyDialog.setWidth(400);
+			propertyDialog.setHeight(500);
+			ServiceLocator.addService(propertyDialog);
+		}
 		LvPropertyDialogController dialogController = (LvPropertyDialogController)propertyDialog.getController();
 		dialogController.setXDispatcher(propertyDispatch);
+		LvPropertyDialogData dialogData = dialogController.getData();
+		// Assuming properties list is fixed and Name is the first entry in property bag.
+		dialogData.getProperties().get(0).setValue(shapeName);
 		propertyDialog.show();
+	}
+
+	private void processProperties() {
+		
+		LvPropertyDialog propertyDialog = (LvPropertyDialog)ServiceLocator.getService("LvPropertyDialog");
+		if (propertyDialog == null) {
+			JOptionPane.showMessageDialog(null, "Unable to retrieve LvPropertyDialog");
+			return;
+		}
+		
+		LvPropertyDialogController dialogController = (LvPropertyDialogController)propertyDialog.getController();
+		LvPropertyDialogData dialogData = dialogController.getData();
+		
+		try {
+			XTextDocument xTextDocument = m_docHandler.getXTextDocument();
+			ArrayList<XShape> selectedXShapes = m_docHandler.extractSelectedShapes(xTextDocument);
+			if (selectedXShapes == null) {
+				JOptionPane.showMessageDialog(null, "Select one shape.", "Error", 
+																	MessageBoxType.ERRORBOX_value);
+				return;
+			}
+			
+			XPropertySet xShapeProps = (XPropertySet)UnoRuntime.queryInterface(
+											XPropertySet.class, selectedXShapes.get(0));
+			// Assuming properties list is fixed and Name is the first entry in property bag.
+			System.out.println("Retrieve " + dialogData.getProperties().get(0).getValue());
+			xShapeProps.setPropertyValue("Name", dialogData.getProperties().get(0).getValue());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
