@@ -28,6 +28,9 @@ Import projct Active Diagrams into Eclipse (File->Import->General->Existing proj
     - Select LibreOffice Properties
       - Configure LibreOffice path
       - Configure LibreOffice SDK path
+    - Add below project dependencies
+      - jgoodies-forms-1.8.0-sources.jar
+      - jgoodies-forms-1.8.0.jar
 
 No compilation errors shown in Probelms Tab
 
