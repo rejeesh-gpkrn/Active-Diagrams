@@ -47,6 +47,7 @@ import controller.ServiceLocator;
 import dialog.LvPropertyDialog;
 import dialog.LvPropertyDialogController;
 import dialog.LvPropertyDialogData;
+import service.ExecutionService;
 import utilities.TimeUtil;
 
 
@@ -124,13 +125,18 @@ public final class ModelerImpl extends WeakBase
 		
 		switch (arg0) {
     	case "actionOne":
-    		execute();
+    		actionOne();
     		System.out.println("actionOne Executed.");
     		break;
     		
     	case "extractShape":
     		extractShape();
     		System.out.println("extractShape Executed.");
+    		break;
+    		
+    	case "execute":
+    		execute();
+    		System.out.println("execute Executed.");
     		break;
     		
     	case "connectShapes":
@@ -174,7 +180,7 @@ public final class ModelerImpl extends WeakBase
 	}
 	
 	// TODO Move code as required.
-	private void execute() {
+	private void actionOne() {
 		try {
 			XTextDocument xTextDocument = m_docHandler.getXTextDocument();
 			XText xText = m_docHandler.getXText(xTextDocument);
@@ -182,6 +188,19 @@ public final class ModelerImpl extends WeakBase
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	private void execute() {
+		ExecutionService service = (ExecutionService)ServiceLocator.getService("ExecutionService");
+		// TODO: Remove the below code to add service explicitly. Services should be added
+		//			to the ServiceLocator as and when they are attained ability
+		//			to be executed.
+		if (service == null) {
+			service = new ExecutionService();
+			ServiceLocator.addService(service);
+		}
+		
+		service.execute();
 	}
 	
 	// TODO Move code as required.
