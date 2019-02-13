@@ -4,6 +4,8 @@
 package service;
 
 import contract.Service;
+import controller.LOInterfaceService;
+import controller.ServiceLocator;
 import contract.Constants.ServiceName;
 
 /**
@@ -14,13 +16,26 @@ public class BrokerService implements Service {
 	
 	@Override
 	public boolean isReady() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public String getName() {
 		return ServiceName.BROKER.getName();
 	}
-
+	
+	public void addService_LO(Service svcLO) {
+		LOInterfaceService documentHandler = (LOInterfaceService)svcLO;
+		documentHandler.initializeXComponent();
+		
+		ServiceLocator.addService(svcLO);
+	}
+	
+	public void addService_Execute() {
+		Service srv = ServiceLocator.getService(ServiceName.EXECUTION.getName());
+		if (srv == null) { 
+			ExecutionService executionSrv = new ExecutionService();
+			ServiceLocator.addService(executionSrv);
+		}
+	}
 }

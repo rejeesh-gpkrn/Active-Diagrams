@@ -38,10 +38,12 @@ import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.view.XSelectionSupplier;
 
+import contract.Constants.ServiceName;
+import contract.Service;
 import extension.ContetMenuClickHandler;
 import extension.ContextMenuInterceptor;
 
-public class DocumentHandler {
+public class LOInterfaceService implements Service {
 	
 	private XComponentContext m_xContext;
 	private XMultiComponentFactory m_xMCF;
@@ -49,7 +51,7 @@ public class DocumentHandler {
 	private XComponent m_xComp;
 	private boolean m_initialized;
 	
-	public DocumentHandler(XComponentContext context) throws NullPointerException {
+	public LOInterfaceService(XComponentContext context) throws NullPointerException {
 		if (context == null) {
 			throw new NullPointerException();
 		}
@@ -473,6 +475,16 @@ public class DocumentHandler {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	@Override
+	public boolean isReady() {
+		return m_initialized;
+	}
+
+	@Override
+	public String getName() {
+		return ServiceName.LO.getName();
 	}
 
 }

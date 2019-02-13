@@ -25,7 +25,8 @@ public final class Constants {
 		BROKER ("BROKER"),
 		READ ("READ"),
 		WRITE ("WRITE"),
-		EXECUTION ("EXECUTION");
+		EXECUTION ("EXECUTION"),
+		LO ("LIBREOFFICE");
 		
 		private String name;
 		

@@ -42,28 +42,35 @@ import com.sun.star.util.XJobManager;
 import com.sun.star.util.XURLTransformer;
 
 import contract.Constants.ServiceName;
+import contract.Service;
 import controller.Craftsman;
-import controller.DocumentHandler;
+import controller.LOInterfaceService;
 import controller.ServiceLocator;
 import dialog.LvPropertyDialog;
 import dialog.LvPropertyDialogController;
 import dialog.LvPropertyDialogData;
+import service.BrokerService;
 import service.ExecutionService;
 import utilities.TimeUtil;
 
 
+/**
+ * LibreOffice extension class handles the plugging
+ * details. Instance of this class is created every time an
+ * action promoted or initiated from LibreOffice. E.g. Command
+ * @author Rejeesh G.
+ */
 public final class ModelerImpl extends WeakBase
    implements com.sun.star.lang.XServiceInfo,
    			com.sun.star.task.XJobExecutor, 
    			XInitialization, XDispatchProvider, XDispatch
-              // org.libreoffice.modeler.XModeler
 {
     private final XComponentContext m_xContext;
     private static final String m_implementationName = ModelerImpl.class.getName();
     private static final String[] m_serviceNames = {
         "org.libreoffice.modeler.Modeler" };
     
-    private DocumentHandler m_docHandler;
+    private LOInterfaceService m_docHandler;
     
     private boolean m_On;
     private Timer m_timer;
@@ -71,12 +78,13 @@ public final class ModelerImpl extends WeakBase
     private volatile boolean m_running = false;
     private volatile int m_timerShow = 0;
 
-    public ModelerImpl( XComponentContext context )
-    {
+    public ModelerImpl( XComponentContext context ) {
     	System.out.println("Active-Diagrams trying to load.");
     	
+    	initializeBroker();
+    	
         m_xContext = context;
-        initialize();
+        addService();
         m_timer = new Timer("FlickerTimer");
         
         // TODO Move this invocation to Enable Menu handler.
@@ -171,10 +179,21 @@ public final class ModelerImpl extends WeakBase
 		}		
 	}
 	
-	private void initialize() {
+	private void initializeBroker() {
+		Service svc = ServiceLocator.getService(ServiceName.BROKER.getName());
+		if (svc == null) {
+			BrokerService brokerSvc = new BrokerService();
+			ServiceLocator.addService(brokerSvc);
+		}
+	}
+	
+	private void addService() {
 		try {
-			m_docHandler = new DocumentHandler(m_xContext);
-			m_docHandler.initializeXComponent();
+			m_docHandler = new LOInterfaceService(m_xContext);
+			BrokerService brokerSvc = (BrokerService)ServiceLocator.getService(ServiceName.BROKER.getName());
+			brokerSvc.addService_LO(m_docHandler);
+			//m_docHandler.initializeXComponent();
+			brokerSvc.addService_Execute();
 		} catch (NullPointerException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
@@ -193,15 +212,9 @@ public final class ModelerImpl extends WeakBase
 	
 	private void execute() {
 		ExecutionService service = (ExecutionService)ServiceLocator.getService(ServiceName.EXECUTION.getName());
-		// TODO: Remove the below code to add service explicitly. Services should be added
-		//			to the ServiceLocator as and when they are attained ability
-		//			to be executed.
-		if (service == null) {
-			service = new ExecutionService();
-			ServiceLocator.addService(service);
+		if (service != null) {
+			service.execute();
 		}
-		
-		service.execute();
 	}
 	
 	// TODO Move code as required.
