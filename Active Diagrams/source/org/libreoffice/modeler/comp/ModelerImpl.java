@@ -41,6 +41,7 @@ import com.sun.star.util.URL;
 import com.sun.star.util.XJobManager;
 import com.sun.star.util.XURLTransformer;
 
+import contract.Constants.ServiceName;
 import controller.Craftsman;
 import controller.DocumentHandler;
 import controller.ServiceLocator;
@@ -191,7 +192,7 @@ public final class ModelerImpl extends WeakBase
 	}
 	
 	private void execute() {
-		ExecutionService service = (ExecutionService)ServiceLocator.getService("ExecutionService");
+		ExecutionService service = (ExecutionService)ServiceLocator.getService(ServiceName.EXECUTION.getName());
 		// TODO: Remove the below code to add service explicitly. Services should be added
 		//			to the ServiceLocator as and when they are attained ability
 		//			to be executed.

@@ -4,6 +4,7 @@
 package service;
 
 import contract.Constants.ExecutionStatus;
+import contract.Constants.ServiceName;
 import contract.Service;
 import utilities.MessageUtil;
 
@@ -13,8 +14,6 @@ import utilities.MessageUtil;
  */
 public class ExecutionService implements Service {
 	
-	public static final String NAME = "ExecutionService";
-
 	@Override
 	public boolean isReady() {
 		// TODO Modify to check whether the system is 
@@ -24,7 +23,7 @@ public class ExecutionService implements Service {
 
 	@Override
 	public String getName() {
-		return NAME;
+		return ServiceName.EXECUTION.getName();
 	}
 	
 	public ExecutionStatus execute() {
