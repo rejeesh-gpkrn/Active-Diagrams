@@ -13,11 +13,31 @@ import javax.swing.JOptionPane;
  */
 public class MessageUtil {
 	
-	public static void showMessageBox(String message) {
-		showMessageBox(message, null);
+	public static void showMessageBox(String message, String title) {
+		showMessageBox(message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	public static void showMessageBox(String message, String title) {
+	public static void showMessageBox(String message) {
+		showMessageBox(message, null, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	public static void showErrorBox(String message, String title) {
+		showMessageBox(message, title, JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public static void showErrorBox(String message) {
+		showMessageBox(message, null, JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public static void showWarningBox(String message, String title) {
+		showMessageBox(message, title, JOptionPane.WARNING_MESSAGE);
+	}
+	
+	public static void showWarningBox(String message) {
+		showMessageBox(message, null, JOptionPane.WARNING_MESSAGE);
+	}
+	
+	public static void showMessageBox(String message, String title, int messageType) {
 		if (message == null || "".equals(message)) {
 			return;
 		}
@@ -26,7 +46,7 @@ public class MessageUtil {
 			title = "Active Diagrams";
 		}
 		
-		JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, title, messageType);
 	}
 
 }

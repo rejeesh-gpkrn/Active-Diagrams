@@ -38,4 +38,12 @@ public class BrokerService implements Service {
 			ServiceLocator.addService(executionSrv);
 		}
 	}
+	
+	public void addService_Read() {
+		Service srv = ServiceLocator.getService(ServiceName.READ.getName());
+		if (srv == null) {
+			ReadService readSrv = new ReadService();
+			ServiceLocator.addService(readSrv);
+		}
+	}
 }

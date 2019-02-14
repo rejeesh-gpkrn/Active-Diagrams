@@ -5,6 +5,7 @@ package service;
 
 import contract.Constants.ExecutionStatus;
 import contract.Constants.ServiceName;
+import controller.ServiceLocator;
 import contract.Service;
 import utilities.MessageUtil;
 
@@ -16,9 +17,8 @@ public class ExecutionService implements Service {
 	
 	@Override
 	public boolean isReady() {
-		// TODO Modify to check whether the system is 
-		//		ready to execute.
-		return true;
+		Service srvLO = ServiceLocator.getService(ServiceName.LO.getName());
+		return (srvLO != null);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class ExecutionService implements Service {
 	public ExecutionStatus execute() {
 		ExecutionStatus status = ExecutionStatus.UNKNOWN;
 		
-		MessageUtil.showMessageBox("Execution under construction.");
+		MessageUtil.showWarningBox("Execution under construction.");
 		
 		return status;
 	}

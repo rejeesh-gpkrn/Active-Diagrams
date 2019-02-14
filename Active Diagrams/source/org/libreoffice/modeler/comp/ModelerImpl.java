@@ -51,6 +51,7 @@ import dialog.LvPropertyDialogController;
 import dialog.LvPropertyDialogData;
 import service.BrokerService;
 import service.ExecutionService;
+import utilities.MessageUtil;
 import utilities.TimeUtil;
 
 
@@ -133,9 +134,12 @@ public final class ModelerImpl extends WeakBase
 	public void trigger(String arg0) {
 		
 		switch (arg0) {
-    	case "actionOne":
-    		actionOne();
-    		System.out.println("actionOne Executed.");
+    	case "activateEdit":
+    		activateEdit();
+    		break;
+    		
+    	case "start":
+    		start();
     		break;
     		
     	case "extractShape":
@@ -189,25 +193,29 @@ public final class ModelerImpl extends WeakBase
 	
 	private void addService() {
 		try {
-			m_docHandler = new LOInterfaceService(m_xContext);
 			BrokerService brokerSvc = (BrokerService)ServiceLocator.getService(ServiceName.BROKER.getName());
+			m_docHandler = new LOInterfaceService(m_xContext);
 			brokerSvc.addService_LO(m_docHandler);
-			//m_docHandler.initializeXComponent();
 			brokerSvc.addService_Execute();
+			brokerSvc.addService_Read();
 		} catch (NullPointerException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
+			MessageUtil.showErrorBox(e.getMessage(), "Active Diagrams: Exception");
 		}
 	}
 	
-	// TODO Move code as required.
-	private void actionOne() {
-		try {
-			XTextDocument xTextDocument = m_docHandler.getXTextDocument();
-			XText xText = m_docHandler.getXText(xTextDocument);
-			JOptionPane.showMessageDialog(null, xText.getString());
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
+	/**
+	 * Edit activation required to request
+	 * user permission to modify user document.
+	 */
+	private void activateEdit() {
+		MessageUtil.showMessageBox("activateEdit Executed.");
+	}
+	
+	/**
+	 * State machine start action: startEvent.
+	 */
+	private void start() {
+		MessageUtil.showMessageBox("start Executed.");
 	}
 	
 	private void execute() {
@@ -424,7 +432,7 @@ public final class ModelerImpl extends WeakBase
 		System.out.println("Property: Text [" + shapeText + "]");
 		// TODO Pass this value to controller.
 		// TODO Organize usage.
-		XDispatch propertyDispatch = m_docHandler.getXDispatcher("service:org.libreoffice.modeler.Modeler?actionOne");
+		XDispatch propertyDispatch = m_docHandler.getXDispatcher("service:org.libreoffice.modeler.Modeler?showProperties");
 		
 		LvPropertyDialog propertyDialog = (LvPropertyDialog)ServiceLocator.getService("LvPropertyDialog");
 		if (propertyDialog == null) {

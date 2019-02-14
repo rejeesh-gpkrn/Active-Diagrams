@@ -90,6 +90,17 @@ public class LOInterfaceService implements Service {
 		return xText;
 	}
 	
+	/**
+	 * @return text content of the document as String.
+	 * @throws Exception
+	 */
+	public String getDocumentText() throws Exception {
+		XTextDocument xTextDocument = getXTextDocument();
+		XText xText = getXText(xTextDocument);
+		String documentText = xText.getString();
+		return documentText;
+	}
+	
 	public XTextCursor getXTextCursor(XText text) throws NullPointerException {
 		if (text == null) {
 			throw new NullPointerException();

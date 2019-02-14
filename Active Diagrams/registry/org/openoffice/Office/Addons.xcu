@@ -26,7 +26,7 @@
 						<value xml:lang="en-US">AD</value>
 					</prop>
 					<prop oor:name="URL">
-						<value>service:org.libreoffice.modeler.Modeler?actionOne</value>
+						<value>service:org.libreoffice.modeler.Modeler?activateEdit</value>
 					</prop>
 					<prop oor:name="Target" oor:type="xs:string">
 						<value>_self</value>
@@ -49,10 +49,10 @@
 				<node oor:name="Submenu">
 					<node oor:name="M1" oor:op="replace">
 						<prop oor:name="Title">
-							<value xml:lang="en-US">Extract Text</value>
+							<value xml:lang="en-US">Start</value>
 						</prop>
 						<prop oor:name="URL">
-							<value>service:org.libreoffice.modeler.Modeler?actionOne</value>
+							<value>service:org.libreoffice.modeler.Modeler?start</value>
 						</prop>
 						<prop oor:name="Target" oor:type="xs:string">
 							<value>_self</value>
